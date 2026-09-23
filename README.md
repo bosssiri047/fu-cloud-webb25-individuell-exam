@@ -16,7 +16,7 @@ Body Example:
 >{
 >  	"username" : "test",
 >  	"password" : "test",
->  	"email" : "testtest@gmail.com" 
+>  	"email" : "test@gmail.com" 
 >  }
 > ```
 
@@ -42,7 +42,7 @@ Body Example:
 Response Example:
 ```json
 {
-	"message": "Login successfull",
+	"message": "Login successful",
 	"token": "eyJhbGciOiJIUzI1NiIs..."
 }
 ```
