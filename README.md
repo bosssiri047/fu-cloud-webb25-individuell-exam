@@ -50,7 +50,7 @@ Response Example:
 ## :speech_balloon: Messages
 ### Check all messages, only from a user, edit, and delete messages
 
-**GET - /messages – Get all messages.**
+**GET - /messages/get – Get all messages.**
 
 Response Example:
 ```json
@@ -198,7 +198,7 @@ The database checks if {username} and {password} already exist and are valid.
 
 The database then returns a token for the user to use to identify themselves within the system.
 
-### /messages
+### /messages/get
 Runs automatically when the homepage is loaded by running the getAllMessages service on the backend using QueryCommand, looking for PK = MESSAGE.
 
 Then return the response to the frontend and let React render the list in MessageFlow.jsx by using the .map function to render out every message with Message.jsx.
