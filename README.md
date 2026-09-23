@@ -4,7 +4,7 @@
 
 https://7zbxtzymgd.execute-api.eu-north-1.amazonaws.com
 
-## 🔐 **Autentication**
+## 🔐 **Authentication**
 ### Authentication for registering a user and logging in
 
 
