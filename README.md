@@ -47,146 +47,53 @@ Response Example:
 }
 ```
 
-## 🏨 Rooms
-## Check for all rooms, available rooms and booked rooms
+## :speech_balloon: Messages
+## Check all messages, only from a user, edit, and delete message
 
-**GET - /rooms – Get all rooms.**
-
-Response Example:
-```json
-{
-	"success": true,
-	"rooms": [
-		{
-			"capacity": 1,
-			"PK": "ROOM",
-			"price": 500,
-			"type": "single",
-			"SK": "ROOM:101"
-		}
-	]
-}
-```
-
-**GET - /rooms/booked – Get all booked rooms.**
+**GET - /messages – Get all messages.**
 
 Response Example:
 ```json
 {
 	"success": true,
-	"rooms": [
+	"messages": [
 		{
-			"capacity": 1,
-			"PK": "ROOM",
-			"price": 500,
-			"type": "single",
-			"SK": "ROOM:101"
-		}
-	]
+			"GSI1PK": "MESSAGE:Solid Snake",
+			"message": "Infiltrating successful.",
+			"PK": "MESSAGE",
+			"GSI1SK": "MESSAGE:06c0",
+			"createAt": "2026-09-23T13:58:22.695Z",
+			"SK": "MESSAGE:06c0"
+		},
+		...
 }
 ```
 
-**POST - /rooms/available – Gets all available rooms based on your preferred dates.**
-
-Body Example:
-```json
- {
-   	"checkIn" : "xxxx-xx-xx",
-   	"checkOut" : "xxxx-xx-xx"
-   }
-```
+**GET - /messages/get/{username} – Get all messages from a specific user.**
 
 Response Example:
 ```json
 {
 	"success": true,
-	"rooms": [
+	"messages": [
 		{
-			"capacity": 1,
-			"PK": "ROOM",
-			"price": 500,
-			"type": "single",
-			"SK": "ROOM:101"
-		}
-	]
+			"SK": "MESSAGE:06c0",
+			"PK": "MESSAGE",
+			"message": "Infiltrating successful.",
+			"GSI1SK": "MESSAGE:06c0",
+			"GSI1PK": "MESSAGE:Solid Snake",
+			"createAt": "2026-09-23T13:58:22.695Z"
+		},
+		...
 }
 ```
 
-## 📅 Bookings (Logged in)
-### User inputs to see your bookings, create, modify or delete a booking.
-
-**GET - /users/bookings – Gets the logged in users bookings.**
-
-Response Example:
-```json
-{
-	"success": true,
-	"bookings": [
-		{
-			"PK": "USER:Boss",
-			"bookingId": "dbdd",
-			"checkIn": "2026-09-15",
-			"checkOut": "2026-09-16",
-			"guests": 1,
-			"price": 500,
-			"rooms": [
-				{
-					"roomId": "ROOM:103",
-					"type": "single"
-				}
-			],
-			"userName": "Boss",
-			"SK": "BOOKING:dbdd"
-		}
-	]
-}
-```
-
-**GET - /users/bookings/{id} – Gets a specifik booking by the bookings id from a user.**
-
-Response Example:
-```json
-{
-	"success": true,
-	"bookings": [
-		{
-			"PK": "USER:Boss",
-			"bookingId": "dbdd",
-			"checkIn": "2026-09-15",
-			"checkOut": "2026-09-16",
-			"guests": 1,
-			"price": 500,
-			"rooms": [
-				{
-					"roomId": "ROOM:103",
-					"type": "single"
-				}
-			],
-			"userName": "Boss",
-			"SK": "BOOKING:dbdd"
-		}
-	]
-}
-```
-
-**POST - /bookings/create – Creates a new booking.**
+**POST - /messages/post – Post a new message.**
 
 Body Example:
 ```json
 {
-    "checkIn": "2026-09-15",
-    "checkOut": "2026-09-17",
-    "guests": 1,
-    "rooms": [
-        {
-            "roomId": "ROOM:101",
-            "type": "single"
-        },
-        {
-            "roomId": "ROOM:102",
-            "type": "single"
-        }
-    ]
+	"message": "Infiltrating successful."
 }
 ```
 
@@ -194,46 +101,16 @@ Response Example:
 ```json
 {
 	"success": true,
-	"message": "Booking created successfully",
-	"booking": {
-		"userName": "Boss",
-		"bookingId": "dbdd",
-		"checkIn": "2026-09-17",
-		"checkOut": "2026-09-18",
-		"guests": 1,
-		"rooms": [
-			{
-				"roomId": "ROOM:101",
-				"type": "single"
-			},
-			{
-				"roomId": "ROOM:102",
-				"type": "single"
-			}
-		],
-		"price": 1000
-	}
+	"message": "Your message was posted successfully."
 }
 ```
 
-**PUT - /bookings/{id} – Updates a booking that already exists by id.**
+**PUT - /messages/edit/{id} - Edit your message.**
 
 Body Example:
 ```json
 {
-    "checkIn": "2026-09-15",
-    "checkOut": "2026-09-17",
-    "guests": 1,
-    "rooms": [
-        {
-            "roomId": "ROOM:101",
-            "type": "single"
-        },
-        {
-            "roomId": "ROOM:102",
-            "type": "single"
-        }
-    ]
+	"message": "edit message"
 }
 ```
 
@@ -241,31 +118,17 @@ Response Example:
 ```json
 {
 	"success": true,
-	"message": "Booking updated successfully",
-	"booking": {
-		"userName": "Boss",
-		"bookingId": "dbdd",
-		"checkIn": "2026-09-15",
-		"checkOut": "2026-09-16",
-		"guests": 1,
-		"rooms": [
-			{
-				"roomId": "ROOM:103",
-				"type": "single"
-			}
-		],
-		"price": 500
-	}
+	"message": "Your message was edited successfully."
 }
 ```
 
-**DELETE - /bookings/delete/{id} – Deletes a booking by the booking id.**
+**DELETE - /messages/delete/{id} - Delete your message.**
 
 Response Example:
 ```json
 {
 	"success": true,
-	"message": "Booking successfully cancelled"
+	"message": "Your message was deleted successfully."
 }
 ```
 
