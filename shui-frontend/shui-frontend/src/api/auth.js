@@ -10,29 +10,49 @@ export const login = async (credentials) => {
 		body : JSON.stringify(credentials)
 	});
 	
-	const data = await response.json();
-	
-	if(!response.ok) {
-		throw new Error(data.message || 'Could not sign in');
+	const rawResponse = await response.text();
+
+	let data;
+
+	try {
+	    data = rawResponse ? JSON.parse(rawResponse) : {};
+	} catch {
+	    data = {
+	        message: rawResponse
+	    };
+	}
+
+	if (!response.ok) {
+	    throw new Error(data.message || 'Could not sign in');
 	}
 
 	return data;
 };
 
 export const register = async (user) => {
-	const response = await fetch(`${BASE_URL}/auth/register`, {
-		method : 'POST',
-		headers : {
-			'Content-Type' : 'application/json'
-		},
-		body : JSON.stringify(user)
-	});
-	
-	const data = await response.json();
-	
-	if(!response.ok) {
-		throw new Error(data.message || 'Could not create accont');
-	}
+    const response = await fetch(`${BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    });
 
-	return data;
+    const rawResponse = await response.text();
+
+    let data;
+
+    try {
+        data = rawResponse ? JSON.parse(rawResponse) : {};
+    } catch {
+        data = {
+            message: rawResponse
+        };
+    }
+
+    if (!response.ok) {
+        throw new Error(data.message || 'Could not create account');
+    }
+
+    return data;
 };
