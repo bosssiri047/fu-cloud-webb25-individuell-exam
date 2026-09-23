@@ -3,8 +3,10 @@ import Button from '../button/Button';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { register } from '../../api/auth';
+import { useState } from 'react';
 
 const RegisterForm = () => {
+    const [passwordError, setPasswordError] = useState('');
 	const {
 		mutate,
 		isPending,
@@ -28,9 +30,10 @@ const RegisterForm = () => {
         };
 
         if (formData.get('password') !== formData.get('password2')) {
+            setPasswordError('Lösenorden matchar inte.');
             return;
         }
-
+        setPasswordError('');
         mutate(user);
     };
 
@@ -78,6 +81,9 @@ const RegisterForm = () => {
                     placeholder="Upprepa ditt lösenord"
                     required
                 />
+                {passwordError && (
+                    <p className="register-form__error">{passwordError}</p>
+                )}
             </label>
             <Button text="Registrera" type="default" />
 

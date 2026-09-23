@@ -49,4 +49,9 @@
         }
     }
 
+    .register-form__error {
+        margin: -0.5rem 0 0;
+        color: #c0392b;
+        font-size: 0.875rem;
+    }
 }
