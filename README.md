@@ -48,7 +48,7 @@ Response Example:
 ```
 
 ## :speech_balloon: Messages
-## Check all messages, only from a user, edit, and delete messages
+### Check all messages, only from a user, edit, and delete messages
 
 **GET - /messages – Get all messages.**
 
