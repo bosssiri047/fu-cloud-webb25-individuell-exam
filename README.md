@@ -2,10 +2,10 @@
 
 ## API-URL 
 
-https://7zbxtzymgd.execute-api.eu-north-1.amazonaws.com/messages
+https://7zbxtzymgd.execute-api.eu-north-1.amazonaws.com
 
 ## 🔐 **Autentication**
-### Authentication for registering a user and login
+### Authentication for registering a user and logging in
 
 
 **POST - /auth/register – Register a new user.**
@@ -48,7 +48,7 @@ Response Example:
 ```
 
 ## :speech_balloon: Messages
-## Check all messages, only from a user, edit, and delete message
+## Check all messages, only from a user, edit, and delete messages
 
 **GET - /messages – Get all messages.**
 
@@ -148,7 +148,7 @@ The client does not have access rights to the content; that is, it is unauthoriz
 
 **404 Not Found:**
 
-The server cannot find the requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 Forbidden to hide the existence of a resource from an unauthorized client. This response code is probably the most well known due to its frequent occurrence on the web.
+The server cannot find the requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid, but the resource itself does not exist. Servers may also send this response instead of 403 Forbidden to hide the existence of a resource from an unauthorized client. This response code is probably the most well-known due to its frequent occurrence on the web.
 
 **409 Conflict:**
 
@@ -161,37 +161,31 @@ The server has encountered a situation it does not know how to handle. This erro
 # DynamoDB Documentation
 
 ## What tables do you use?
-We used a single-table design due to the uncomplicated nature of the database required for this exam.
+I used a single-table design due to the uncomplicated nature of the database required for this exam.
 
 ## Partition Keys, Sort Keys, and Global Secondary Indexes
 
-Rooms:
+Messages:
 
-	PK : ROOM
-	SK : ROOM:{id}
+	PK : MESSAGE
+	SK : MESSAGE:{id}
+	GSI1PK : MESSAGE:{username}
+	GSI1SK : MESSAGE:{id}
 	
 User accounts:
 
 	PK : USER:{username}
-	SK : USER:{username}
-	
-Bookings:
-
-	PK : USER:{username}
-	SK : BOOKING:{bookingId}
-	
-Booked Rooms:
-
-	PK : ROOM:{id}
-	SK : BOOKED:{checkIn}:{checkOut}:{bookingId}
-	GSI1PK : BOOKED:ROOMS
-	GSI1SK : BOOKED:{bookingId}:{checkIn}:{checkOut}
+	SK : PROFILE
+	GSI2PK : {user.email}
+	GSI2SK : {createAt.date.time}
 	
 ## Important Access Patterns
 ### /auth/register
 The user sends {username}, {password}, and {email} to the database.
 
 The database checks if {username} already exists.
+
+The database checks if {user.email} already exists.
 
 If not, then the user is registered in the table with a hashed password.
 
@@ -202,12 +196,27 @@ The database checks if {username} and {password} already exist and are valid.
 
 The database then returns a token for the user to use to identify themselves within the system.
 
-### /rooms/available
-The user sends {checkIn} and {checkOut} to the database.
+### /messages
+Runs automatically when the homepage is loaded by running the getAllMessages service on the backend using QueryCommand, looking for PK = MESSAGE.
 
-The database then checks for any rooms that are booked between {checkIn} and {checkOut} with the help of GSI1PK and filters those out from the list of all rooms before sending back a list containing all rooms that are available to the user.
+Then return the response to the frontend and let React render the list in MessageFlow.jsx by using the .map function to render out every message with Message.jsx.
 
-### /bookings/create
-The user sends {checkIn}, {checkOut}, {guests}, and {rooms}.[i](containing room id and type) to the database.
+### /messages/get/{username}
+Through either clicking a username on the message card or inputting /messages/get/{username} in the link parameter, the user can search for messages from a specific user.
 
-The database then checks if the {rooms} aren't already booked between {checkIn} and {checkOut} before creating a booking and booked rooms items in the table with the data received from the user
+getAllMessagesFromUser in the service then runs a QueryCommand that searches for all matching GSI1PK with the input {username} and then returns a list of messages for the frontend to render.
+
+### /messages/post
+The user has to be logged in to post a new message by sending a text string in the textbox on the new post page, which is accessible by clicking on the "Nytt meddelande" button on the homepage.
+
+The backend then takes the text string in, runs newMessage in the service, and uploads the message along with necessary data such as PK, SK, GSI1PK, and GSI2PK to the database.
+
+### messages/edit/{id}
+The user has to be logged in to edit their messages by clicking on the edit icon on the message card; it will then bring the user to a page that looks similar to /messages/post but for editing.
+
+The backend then takes the text string and post ID in, runs editMessage in the service, checks if the logged-in user and the owner of the message inside GSI1PK are the same, and then uploads the edited message to the database if so.
+
+### messages/delete/{id}
+The user has to be logged in to edit their messages by clicking on the trash icon on the message card; it will then prompt the user and ask if they are sure.
+
+The backend then takes the post ID in, runs deleteMessage in the service, checks if the logged-in user and the owner of the message inside GSI1PK are the same, and then deletes the message from the database if so.
