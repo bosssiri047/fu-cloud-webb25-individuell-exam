@@ -25,5 +25,9 @@ export const router = createBrowserRouter([
     {
         path: "/messages/edit/:id",
         element: <EditMessagePage />,
+    },
+    {
+        path: "/messages/get/:username",
+        element: <HomePage />,
     }
 ]);

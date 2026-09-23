@@ -2,26 +2,25 @@ import './index.css';
 import Header from '../../components/header/Header';
 import Button from '../../components/button/Button';
 import MessageFlow from '../../components/messageflow/MessageFlow';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authstore';
 import { getMessages, getAllMessagesFromUser } from '../../api/messages';
 import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 const HomePage = () => {
     const navigate = useNavigate();
     const token = useAuthStore((state) => state.token);
-    const [selectedUsername, setSelectedUsername] = useState(null);
-
+    const { username } = useParams();
     const {
         data: messages = [],
         isPending,
         isError,
         error,
     } = useQuery({
-        queryKey: ['messages', selectedUsername],
-        queryFn: () => selectedUsername
-            ? getAllMessagesFromUser(selectedUsername)
+        queryKey: ['messages', username],
+        queryFn: () => username
+            ? getAllMessagesFromUser(username)
             : getMessages(),
     });
 
@@ -31,6 +30,10 @@ const HomePage = () => {
         new Date(firstMessage.createAt)
     );
 
+    const handleUsernameClick = (clickedUsername) => {
+        navigate(`/messages/get/${encodeURIComponent(clickedUsername)}`);
+    };
+
     return (
         <section className="page homepage">
             <Header />
@@ -39,12 +42,12 @@ const HomePage = () => {
                     <h2 className="homepage__title">
                         Alla meddelanden
                     </h2>
-                    {selectedUsername && (
+                    {username && (
                         <Button
                             text="Visa alla meddelanden"
                             type="outline"
                             htmlType="button"
-                            onClick={() => setSelectedUsername(null)}
+                            onClick={() => navigate('/')}
                         />
                     )}
                     {token && (
@@ -66,7 +69,7 @@ const HomePage = () => {
                 {!isPending && !isError && (
                     <MessageFlow
                         messages={sortedMessages}
-                        onUsernameClick={setSelectedUsername}
+                        onUsernameClick={handleUsernameClick}
                     />
                 )}
             </div>

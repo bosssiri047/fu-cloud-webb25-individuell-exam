@@ -69,10 +69,6 @@ p {
   width: 100%;
   min-height: 100vh;
 
-  .page__title {
-
-  }
-
   .page__form-container {
     padding: 1rem;
     border-radius: 15px;

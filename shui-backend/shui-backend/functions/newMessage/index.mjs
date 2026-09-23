@@ -20,7 +20,7 @@ export const handler = middy(async (event) => {
 
   await newMessage(messageData);
 
-  return sendResponse(200, {
+  return sendResponse(201, {
     success: true,
     message: "Your message was posted successfully."
   });
