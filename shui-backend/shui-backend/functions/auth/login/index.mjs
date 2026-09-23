@@ -26,7 +26,7 @@ export const handler = middy(async (event) => {
     }
     
     return sendResponse(200, { 
-        message : 'Login successfull',
+        message : 'Login successful',
         token : signToken({ username : user.username })
      })
 }).use(httpJsonBodyParser())
