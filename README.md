@@ -17,7 +17,7 @@ Body Example:
 >  	"username" : "test",
 >  	"password" : "test",
 >  	"email" : "test@gmail.com" 
->  }
+>}
 > ```
 
 Response Example:
@@ -36,7 +36,7 @@ Body Example:
 >{
 >  	"username" : "test",
 >  	"password" : "test"
->  }
+>}
 > ```
 
 Response Example:
@@ -66,6 +66,7 @@ Response Example:
 			"SK": "MESSAGE:06c0"
 		},
 		...
+	]
 }
 ```
 
@@ -85,6 +86,7 @@ Response Example:
 			"createAt": "2026-09-23T13:58:22.695Z"
 		},
 		...
+	]
 }
 ```
 
@@ -202,7 +204,7 @@ Runs automatically when the homepage is loaded by running the getAllMessages ser
 Then return the response to the frontend and let React render the list in MessageFlow.jsx by using the .map function to render out every message with Message.jsx.
 
 ### /messages/get/{username}
-Through either clicking a username on the message card or inputting /messages/get/{username} in the link parameter, the user can search for messages from a specific user.
+By either clicking a username on the message card or inputting /messages/get/{username} in the link parameter, the user can search for messages from a specific user.
 
 getAllMessagesFromUser in the service then runs a QueryCommand that searches for all matching GSI1PK with the input {username} and then returns a list of messages for the frontend to render.
 
