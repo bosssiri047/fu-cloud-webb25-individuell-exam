@@ -1,7 +1,11 @@
 # Documentation
+## Bucket S3 URL
+http://shui-db-bucket-853255354102-eu-north-1-an.s3-website.eu-north-1.amazonaws.com
+
+## Cloudfront URL
+https://d2gej3w52y4cvr.cloudfront.net/
 
 ## API-URL 
-
 https://7zbxtzymgd.execute-api.eu-north-1.amazonaws.com
 
 ## 🔐 **Authentication**
