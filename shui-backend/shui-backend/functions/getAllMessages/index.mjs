@@ -1,16 +1,21 @@
 import middy from '@middy/core';
 import httpErrorHandler from '@middy/http-error-handler';
-import httpJsonBodyParser from '@middy/http-json-body-parser';
+import { getAllMessages } from '../../services/messages.mjs';
 import { sendResponse } from '../../responses/index.mjs';
-import { authenticateUser } from '../../middlewares/authenticate.mjs';
 
 export const handler = middy(async (event) => {
-
-  return sendResponse(200, {
-    success: true,
-    message: "XXX"
-  });
+  const messages = await getAllMessages();
+  if(messages) {
+    return sendResponse(200, {
+      success : true,
+      messages
+    });
+    
+  } else {
+    return sendResponse(500, { 
+      success : false,
+      message : "No messages found."
+    });
+  }
   
-}).use(authenticateUser())
-  .use(httpJsonBodyParser())
-  .use(httpErrorHandler());
+}).use(httpErrorHandler());

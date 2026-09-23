@@ -9,10 +9,51 @@ provider:
   environment:
     JWT_SECRET: ${file(./.env):JWT_SECRET}
   region : eu-north-1
-  iam: 
+  iam:
     role: ${file(./config.yml):role}
   httpApi:
-      		cors: true
-
-
+    cors: true
+    
 functions:
+  login:
+    handler: functions/auth/login/index.handler
+    events:
+      - httpApi:
+          path: /auth/login
+          method: post
+  register:
+    handler: functions/auth/register/index.handler
+    events:
+      - httpApi:
+          path: /auth/register
+          method: post
+  newMessage:
+    handler: functions/newMessage/index.handler
+    events:
+      - httpApi:
+          path: /messages/post
+          method: post
+  getAllMessages:
+    handler: functions/getAllMessages/index.handler
+    events:
+      - httpApi:
+          path: /messages/get
+          method: get
+  getAllMessagesFromUser:
+    handler: functions/getAllMessagesFromUser/index.handler
+    events:
+      - httpApi:
+          path: /messages/get/{username}
+          method: get
+  editMessage:
+    handler: functions/editMessage/index.handler
+    events:
+      - httpApi:
+          path: /messages/edit/{id}
+          method: put
+  deleteMessage:
+    handler: functions/deleteMessage/index.handler
+    events:
+      - httpApi:
+          path: /messages/delete/{id}
+          method: delete

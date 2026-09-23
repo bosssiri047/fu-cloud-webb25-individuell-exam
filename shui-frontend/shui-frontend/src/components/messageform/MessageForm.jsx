@@ -1,24 +1,55 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import './index.css';
 import Button from '../button/Button';
+import { newMessage, editMessage } from '../../api/messages';
+import { useAuthStore } from '../../stores/authstore';
 
-const MessageForm = ({ message = null }) => {
-    const [text, setText] = useState(message?.text ?? '');
+
+const MessageForm = ({ message, messageId }) => {
+    const navigate = useNavigate();
+    const token = useAuthStore((state) => state.token);
+    const username = useAuthStore((state) => state.user?.username);
+
+    const [text, setText] = useState(message?.message ?? '');
+
+    const {
+        mutate,
+        isPending,
+        isError,
+        error,
+    } = useMutation({
+        mutationFn: (messageData) => {
+            if (message) {
+                return editMessage(messageData, token, messageId);
+            }
+
+            return newMessage(messageData, token);
+        },
+        onSuccess: () => {
+            navigate('/');
+        },
+    });
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        if (!text.trim()) {
+            return;
+        }
+
+        mutate({
+            username,
+            message: text.trim(),
+        });
+    };
 
     return (
-        <form className="message-form">
-            <label className="message-form__label">
-                Användarnamn
-
-                <input
-                    type="text"
-                    className="message-form__input"
-                    placeholder="Skriv ditt namn här"
-                    value={ !message ? '' : message.user.username }
-                    disabled={ !message ? false : true }
-                />
-            </label>
-
+        <form 
+            className="message-form"
+            onSubmit={handleSubmit}
+        >
             <label className="message-form__label">
                 Meddelande
 
@@ -36,16 +67,24 @@ const MessageForm = ({ message = null }) => {
                     </span>
                 </div>
             </label>
-            <Button 
-                text={ !message ? 'Publicera' : 'Spara ändringar' }
+            <Button
+                text={message ? 'Spara ändringar' : 'Publicera'}
                 type="default"
-                onClick={ console.log('Spara meddelande') }
             />
-            <Button 
+
+            <Button
                 text="Rensa"
                 type="outline"
-                onClick={ console.log('Rensa') }
+                htmlType="button"
+                onClick={() => setText('')}
             />
+
+            {isPending && <p>Publicerar...</p>}
+            {isError && (
+                <p className="message-form__error">
+                    {error.message}
+                </p>
+            )}
         </form>
     );
 };

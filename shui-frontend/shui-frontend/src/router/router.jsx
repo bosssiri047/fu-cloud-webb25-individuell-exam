@@ -19,11 +19,11 @@ export const router = createBrowserRouter([
         element: <RegisterPage />,
     },
     {
-        path: "/message/create",
+        path: "/messages/create",
         element: <NewMessagePage />,
     }, 
     {
-        path: "/message/edit/:id",
+        path: "/messages/edit/:id",
         element: <EditMessagePage />,
     }
 ]);

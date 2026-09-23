@@ -1,14 +1,16 @@
 import './index.css';
 import Message from '../message/Message';
 
-const MessageFlow = ({ messages }) => {
+const MessageFlow = ({ messages, onUsernameClick }) => {
     return (
         <section className="message-flow">
-            {
-                messages && messages.map(message => {
-                    return <Message message={ message } key={ message.id } />
-                })
-            }
+             {messages.map((message) => (
+                <Message
+                    key={message.SK}
+                    message={message}
+                    onUsernameClick={onUsernameClick}
+                />
+            ))}
         </section>
     )
 }
