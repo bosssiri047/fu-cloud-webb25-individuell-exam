@@ -1,0 +1,18 @@
+org: ${file(./config.yml):org}
+
+service: shui-backend
+
+provider:
+  name: aws
+  runtime: nodejs24.x
+  architecture: arm64
+  environment:
+    JWT_SECRET: ${file(./.env):JWT_SECRET}
+  region : eu-north-1
+  iam: 
+    role: ${file(./config.yml):role}
+  httpApi:
+      		cors: true
+
+
+functions:
