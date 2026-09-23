@@ -4,6 +4,8 @@ import httpJsonBodyParser from '@middy/http-json-body-parser';
 import { sendResponse } from '../../responses/index.mjs';
 import { authenticateUser } from '../../middlewares/authenticate.mjs';
 import { editMessage } from '../../services/messages.mjs';
+import { zodValidate } from '../../middlewares/zodValidate.mjs';
+import { messageSchema } from '../../models/message/messageSchema.mjs';
 
 export const handler = middy(async (event) => {
   const { id } = event.pathParameters;
@@ -23,4 +25,5 @@ export const handler = middy(async (event) => {
   });
 }).use(authenticateUser())
   .use(httpJsonBodyParser())
-  .use(httpErrorHandler());
+  .use(httpErrorHandler())
+  .use(zodValidate(messageSchema));
